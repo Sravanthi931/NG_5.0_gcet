@@ -12,19 +12,19 @@
     />
     <style>
       :root {
-        --bg: #0b1020;
-        --bg-soft: #161d32;
-        --panel: rgba(17, 24, 39, 0.9);
-        --panel-strong: #111827;
-        --card: rgba(21, 31, 52, 0.88);
-        --muted: #a5b4cf;
-        --text: #f8fafc;
-        --soft-text: #dfe7f6;
-        --accent: #ff7a59;
-        --accent-2: #ffb36b;
-        --green: #5eead4;
-        --shadow: rgba(15, 23, 42, 0.35);
-        --border: rgba(148, 163, 184, 0.2);
+        --bg: #f7f5ed;
+        --bg-soft: #eef1e7;
+        --panel: #fffefa;
+        --panel-strong: #ffffff;
+        --card: #fffefa;
+        --muted: #6b786e;
+        --text: #20352a;
+        --soft-text: #59685e;
+        --accent: #d9653b;
+        --accent-2: #ef9b52;
+        --green: #3f7654;
+        --shadow: rgba(45, 65, 48, 0.1);
+        --border: rgba(49, 83, 57, 0.12);
       }
 
       * {
@@ -39,56 +39,47 @@
         margin: 0;
         font-family: "Inter", sans-serif;
         background:
-          radial-gradient(circle at top left, rgba(255, 122, 89, 0.15), transparent 28%),
-          radial-gradient(circle at bottom right, rgba(94, 234, 212, 0.12), transparent 25%),
-          linear-gradient(135deg, #050b16 0%, #0d1325 48%, #0b1322 100%);
+          radial-gradient(circle at 8% 4%, rgba(239, 155, 82, 0.13), transparent 26rem),
+          radial-gradient(circle at 92% 25%, rgba(63, 118, 84, 0.1), transparent 28rem),
+          linear-gradient(135deg, #fbfaf5 0%, #f2f3e9 100%);
         color: var(--text);
         position: relative;
-        cursor: none;
       }
 
       .chef-cursor {
         position: fixed;
         left: 0;
         top: 0;
-        width: 34px;
-        height: 110px;
+        width: 44px;
+        height: 44px;
         pointer-events: none;
         z-index: 9999;
-        transform: translate(-10%, -18%) rotate(25deg);
-        transition: width 0.2s ease, height 0.2s ease, filter 0.2s ease;
-        filter: drop-shadow(0 0 14px rgba(255, 180, 82, 0.6));
+        transform: translate(-12%, -12%) rotate(-9deg);
+        transition: transform 0.18s ease, filter 0.18s ease;
+        filter: drop-shadow(0 3px 4px rgba(52, 66, 46, 0.24));
       }
 
-      .chef-cursor::before {
-        content: "";
-        position: absolute;
-        left: 8px;
-        top: 0;
-        width: 18px;
-        height: 70px;
-        background: linear-gradient(180deg, #fef3d0 0%, #d9b06d 40%, #a86a2a 100%);
-        border-radius: 14px 14px 18px 18px;
-        border: 2px solid rgba(112, 62, 20, 0.7);
-      }
-
-      .chef-cursor::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        top: 14px;
-        width: 26px;
-        height: 32px;
-        background: linear-gradient(135deg, #fff7de 0%, #d3b16d 100%);
-        border-radius: 50% 55% 60% 40%;
-        border: 2px solid rgba(112, 62, 20, 0.7);
-        transform: rotate(-14deg);
+      .chef-cursor svg {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
 
       .chef-cursor.hover {
-        width: 42px;
-        height: 120px;
-        filter: drop-shadow(0 0 20px rgba(94, 234, 212, 0.7));
+        transform: translate(-12%, -12%) rotate(4deg) scale(1.12);
+        filter: drop-shadow(0 4px 6px rgba(217, 101, 59, 0.28));
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        body {
+          cursor: none;
+        }
+      }
+
+      @media (hover: none), (pointer: coarse) {
+        .chef-cursor {
+          display: none;
+        }
       }
 
       .smoke-layer {
@@ -631,10 +622,345 @@
           align-items: flex-start;
         }
       }
+
+      .page-shell {
+        width: min(1280px, calc(100% - 40px));
+        padding-top: 22px;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 12px;
+        z-index: 10;
+        padding: 12px 16px;
+        background: rgba(255, 254, 250, 0.92);
+        border-color: rgba(49, 83, 57, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 12px 34px rgba(45, 65, 48, 0.08);
+      }
+
+      .brand {
+        letter-spacing: -0.02em;
+      }
+
+      .brand-mark {
+        background: linear-gradient(145deg, #3f7654, #28563d);
+        box-shadow: 0 8px 20px rgba(45, 96, 62, 0.2);
+      }
+
+      .nav-links a {
+        color: #59685e;
+        font-weight: 600;
+      }
+
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      .nav-btn,
+      .search-btn {
+        background: linear-gradient(135deg, #d9653b, #e88048);
+        box-shadow: 0 8px 20px rgba(217, 101, 59, 0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .nav-btn:hover,
+      .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(217, 101, 59, 0.26);
+      }
+
+      .sound-toggle {
+        background: #fffefa;
+        border-color: var(--border);
+        color: var(--text);
+      }
+
+      .hero {
+        gap: 24px;
+        margin-top: 26px;
+      }
+
+      .hero-content,
+      .featured-box,
+      .filter-panel,
+      .stats,
+      .result-header {
+        background: rgba(255, 254, 250, 0.9);
+        border-color: rgba(49, 83, 57, 0.1);
+        box-shadow: 0 16px 42px rgba(45, 65, 48, 0.07);
+        backdrop-filter: blur(14px);
+      }
+
+      .hero-content {
+        padding: clamp(30px, 5vw, 58px);
+      }
+
+      .eyebrow {
+        color: var(--accent);
+      }
+
+      h1 {
+        max-width: 700px;
+        color: #20352a;
+      }
+
+      .hero-copy,
+      .featured-box p,
+      .meal-content p {
+        color: var(--soft-text);
+      }
+
+      .search-wrap {
+        background: #fff;
+        border: 1px solid rgba(49, 83, 57, 0.14);
+        box-shadow: 0 8px 22px rgba(45, 65, 48, 0.06);
+      }
+
+      .search-wrap:focus-within {
+        border-color: rgba(63, 118, 84, 0.5);
+        box-shadow: 0 0 0 4px rgba(63, 118, 84, 0.1);
+      }
+
+      .search-wrap input,
+      .field input,
+      .field select {
+        color: var(--text);
+      }
+
+      .search-wrap input::placeholder,
+      .field input::placeholder {
+        color: #89948a;
+      }
+
+      .featured-box {
+        border-radius: 28px;
+      }
+
+      .featured-badge {
+        z-index: 1;
+        background: rgba(255, 254, 250, 0.94);
+        color: var(--green);
+        box-shadow: 0 6px 16px rgba(32, 53, 42, 0.1);
+      }
+
+      .featured-image {
+        height: 280px;
+        margin-top: 14px;
+        border-radius: 22px;
+      }
+
+      .featured-image img,
+      .meal-media img {
+        transition: transform 0.45s ease, opacity 0.35s ease;
+      }
+
+      .featured-box:hover .featured-image img,
+      .meal-card:hover .meal-media img {
+        transform: scale(1.04);
+      }
+
+      .tag {
+        background: #eef2e9;
+        color: #496650;
+      }
+
+      .featured-meta .tag:first-child,
+      .meal-tags .tag:first-child {
+        background: #fbede5;
+        color: #a74e31;
+      }
+
+      .filter-panel {
+        margin-top: 22px;
+        padding: 22px;
+      }
+
+      .field label,
+      .stat-box small {
+        color: #6b786e;
+      }
+
+      .field input,
+      .field select {
+        background: #fff;
+        border-color: rgba(49, 83, 57, 0.15);
+      }
+
+      .field input:focus,
+      .field select:focus {
+        border-color: rgba(63, 118, 84, 0.65);
+        box-shadow: 0 0 0 3px rgba(63, 118, 84, 0.12);
+      }
+
+      .reset-btn {
+        background: #f4f5ef;
+        border-color: rgba(49, 83, 57, 0.14);
+        color: var(--green);
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .reset-btn:hover {
+        background: #e9efe5;
+        transform: translateY(-1px);
+      }
+
+      .stats {
+        padding: 14px;
+      }
+
+      .stat-box {
+        background: linear-gradient(145deg, #f5f6ef, #fffefa);
+        border: 1px solid rgba(49, 83, 57, 0.07);
+      }
+
+      .stat-box strong {
+        color: var(--green);
+      }
+
+      .result-header {
+        padding: 18px 22px;
+      }
+
+      .result-header h3 {
+        color: var(--text);
+      }
+
+      .result-header span {
+        color: var(--muted);
+      }
+
+      .meal-grid {
+        gap: 20px;
+      }
+
+      .meal-card {
+        background: #fffefa;
+        border-color: rgba(49, 83, 57, 0.1);
+        border-radius: 22px;
+        box-shadow: 0 12px 32px rgba(45, 65, 48, 0.08);
+      }
+
+      .meal-card:hover,
+      .meal-card.active {
+        border-color: rgba(217, 101, 59, 0.36);
+        box-shadow: 0 18px 38px rgba(45, 65, 48, 0.14);
+      }
+
+      .meal-media {
+        height: 230px;
+        background: #e9ede4;
+      }
+
+      .meal-content {
+        padding: 18px 18px 20px;
+      }
+
+      .meal-content h4 {
+        color: var(--text);
+        letter-spacing: -0.02em;
+      }
+
+      .meal-ingredients {
+        color: #68766c;
+      }
+
+      .meal-link {
+        background: #eef2e9;
+        border-color: rgba(49, 83, 57, 0.08);
+        color: var(--green);
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .meal-link:hover {
+        background: var(--green);
+        color: #fff;
+      }
+
+      :focus-visible {
+        outline: 3px solid rgba(217, 101, 59, 0.7);
+        outline-offset: 3px;
+      }
+
+      .empty-state {
+        grid-column: 1 / -1;
+        color: var(--muted);
+        background: rgba(255, 254, 250, 0.8);
+        border-color: rgba(49, 83, 57, 0.22);
+      }
+
+      .smoke-layer {
+        opacity: 1;
+        background:
+          repeating-radial-gradient(circle at 4% 72%, transparent 0 42px, rgba(63, 118, 84, 0.055) 44px 46px, transparent 48px 64px),
+          repeating-radial-gradient(circle at 96% 38%, transparent 0 54px, rgba(217, 101, 59, 0.045) 56px 58px, transparent 60px 76px);
+      }
+
+      .smoke-layer::after {
+        content: "";
+        position: absolute;
+        inset: 68% 0 0;
+        background-color: rgba(217, 101, 59, 0.025);
+        background-image:
+          linear-gradient(rgba(63, 118, 84, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(63, 118, 84, 0.045) 1px, transparent 1px);
+        background-size: 42px 42px;
+        mask-image: linear-gradient(to bottom, transparent, #000 35%);
+      }
+
+      .smoke-layer span {
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(239, 155, 82, 0.08), rgba(239, 155, 82, 0.025) 42%, transparent 72%);
+        filter: blur(22px);
+        opacity: 0.45;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page-shell {
+          width: min(100% - 24px, 560px);
+          padding-top: 12px;
+        }
+
+        .topbar {
+          position: static;
+          align-items: stretch;
+        }
+
+        .hero-content {
+          padding: 30px 22px;
+        }
+
+        .featured-box {
+          padding: 18px;
+        }
+
+        .featured-image {
+          height: 230px;
+        }
+      }
     </style>
   </head>
   <body>
-    <div class="chef-cursor" aria-hidden="true"></div>
+    <div class="chef-cursor" aria-hidden="true">
+      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 23a8 8 0 0 1 2-15 10 10 0 0 1 18 0 8 8 0 0 1 6 14v5H11z" fill="#fffefa" stroke="#3f7654" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M12 25h25v11a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3z" fill="#fffefa" stroke="#3f7654" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M13 29h23" stroke="#d9653b" stroke-width="3" stroke-linecap="round"/>
+        <path d="M19 13v7m9-8v8" stroke="#e6eadf" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
     <div class="smoke-layer" aria-hidden="true">
       <span></span>
       <span></span>
@@ -657,7 +983,7 @@
 
         <div style="display:flex; align-items:center; gap:12px;">
           <button id="soundToggle" class="sound-toggle" type="button" aria-label="Toggle cooking ambience">Sound: Off</button>
-          <button class="nav-btn" type="button">Explore Now</button>
+          <a class="nav-btn" href="#recipes">Explore recipes</a>
         </div>
       </header>
 
@@ -1060,9 +1386,13 @@
         chefCursor.style.top = `${event.clientY}px`;
       });
 
-      document.querySelectorAll("a, button, select, input, .meal-card").forEach((element) => {
-        element.addEventListener("mouseenter", () => chefCursor.classList.add("hover"));
-        element.addEventListener("mouseleave", () => chefCursor.classList.remove("hover"));
+      const interactiveSelector = "a, button, select, input, .meal-card";
+      document.addEventListener("pointerover", (event) => {
+        if (event.target.closest(interactiveSelector)) chefCursor.classList.add("hover");
+      });
+      document.addEventListener("pointerout", (event) => {
+        const nextTarget = event.relatedTarget;
+        chefCursor.classList.toggle("hover", Boolean(nextTarget && nextTarget.closest(interactiveSelector)));
       });
 
       document.body.addEventListener("pointerdown", startAmbientSound, { once: true });
