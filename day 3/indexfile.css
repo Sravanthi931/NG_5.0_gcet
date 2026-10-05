@@ -1,0 +1,25 @@
+.box{
+    background-color: aquamarine;
+    margin: 10px;
+    padding: 5px; 
+    text-align: center;
+    font-weight: bold;
+}
+.block{
+    background-color: antiquewhite;
+    display: block;
+}
+.inline{
+    text-align: center;
+    display: inline;
+}
+.inline-block{
+     background-color: antiquewhite;
+     display: inline-block;
+     height: 100px;
+     width: 150px;
+}
+.none{
+     background-color: aquamarine;
+     display: none;
+}

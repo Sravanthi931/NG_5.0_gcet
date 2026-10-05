@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flavor Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0b1020;
+        --bg-soft: #161d32;
+        --panel: rgba(17, 24, 39, 0.9);
+        --panel-strong: #111827;
+        --card: rgba(21, 31, 52, 0.88);
+        --muted: #a5b4cf;
+        --text: #f8fafc;
+        --soft-text: #dfe7f6;
+        --accent: #ff7a59;
+        --accent-2: #ffb36b;
+        --green: #5eead4;
+        --shadow: rgba(15, 23, 42, 0.35);
+        --border: rgba(148, 163, 184, 0.2);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(255, 122, 89, 0.15), transparent 28%),
+          radial-gradient(circle at bottom right, rgba(94, 234, 212, 0.12), transparent 25%),
+          linear-gradient(135deg, #050b16 0%, #0d1325 48%, #0b1322 100%);
+        color: var(--text);
+        position: relative;
+        cursor: none;
+      }
+
+      .chef-cursor {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 34px;
+        height: 110px;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-10%, -18%) rotate(25deg);
+        transition: width 0.2s ease, height 0.2s ease, filter 0.2s ease;
+        filter: drop-shadow(0 0 14px rgba(255, 180, 82, 0.6));
+      }
+
+      .chef-cursor::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 0;
+        width: 18px;
+        height: 70px;
+        background: linear-gradient(180deg, #fef3d0 0%, #d9b06d 40%, #a86a2a 100%);
+        border-radius: 14px 14px 18px 18px;
+        border: 2px solid rgba(112, 62, 20, 0.7);
+      }
+
+      .chef-cursor::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 14px;
+        width: 26px;
+        height: 32px;
+        background: linear-gradient(135deg, #fff7de 0%, #d3b16d 100%);
+        border-radius: 50% 55% 60% 40%;
+        border: 2px solid rgba(112, 62, 20, 0.7);
+        transform: rotate(-14deg);
+      }
+
+      .chef-cursor.hover {
+        width: 42px;
+        height: 120px;
+        filter: drop-shadow(0 0 20px rgba(94, 234, 212, 0.7));
+      }
+
+      .smoke-layer {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+        background: radial-gradient(circle at 20% 20%, rgba(255, 123, 74, 0.22), transparent 28%),
+                    radial-gradient(circle at 80% 30%, rgba(93, 214, 191, 0.18), transparent 25%),
+                    rgba(7, 11, 20, 0.45);
+      }
+
+      .smoke-layer span {
+        position: absolute;
+        bottom: -220px;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,255,255,0.32), rgba(255,255,255,0.08), transparent 72%);
+        filter: blur(30px);
+        animation: smokeRise 18s infinite ease-in-out;
+        opacity: 0.75;
+      }
+
+      .smoke-layer span:nth-child(1) { left: 8%; animation-delay: 0s; }
+      .smoke-layer span:nth-child(2) { left: 32%; animation-delay: 4s; }
+      .smoke-layer span:nth-child(3) { left: 58%; animation-delay: 8s; }
+      .smoke-layer span:nth-child(4) { left: 78%; animation-delay: 12s; }
+
+      @keyframes smokeRise {
+        0% {
+          transform: translateY(0) scale(0.7) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.32;
+        }
+        50% {
+          transform: translateY(-28vh) scale(1.2) rotate(12deg);
+          opacity: 0.22;
+        }
+        100% {
+          transform: translateY(-58vh) scale(1.5) rotate(-10deg);
+          opacity: 0;
+        }
+      }
+
+      img {
+        display: block;
+        width: 100%;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .page-shell {
+        width: min(1200px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 64px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 18px;
+        border: 1px solid var(--border);
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 18px;
+        backdrop-filter: blur(16px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+      }
+
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #fff;
+        font-size: 1.1rem;
+        box-shadow: 0 12px 28px rgba(255, 122, 89, 0.35);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .nav-links a {
+        color: var(--muted);
+        transition: color 0.25s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      .nav-btn {
+        padding: 0.8rem 1.3rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: white;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 18px 40px rgba(255, 122, 89, 0.35);
+      }
+
+      .sound-toggle {
+        padding: 0.7rem 1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.11);
+        background: rgba(15, 23, 42, 0.7);
+        color: var(--text);
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 28px;
+        align-items: center;
+        margin-top: 34px;
+        padding: 24px 0 12px;
+      }
+
+      .hero-content,
+      .featured-box,
+      .filter-panel,
+      .stats,
+      .result-header {
+        background: rgba(15, 23, 42, 0.72);
+        border: 1px solid var(--border);
+        border-radius: 26px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 18px 50px var(--shadow);
+      }
+
+      .hero-content {
+        padding: 42px 32px;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--green);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.76rem;
+        font-weight: 700;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.5rem, 4vw, 4.4rem);
+        line-height: 1.02;
+        letter-spacing: -0.06em;
+      }
+
+      .hero-copy {
+        margin-top: 16px;
+        color: var(--soft-text);
+        font-size: 1.05rem;
+        line-height: 1.7;
+        max-width: 620px;
+      }
+
+      .search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 20px;
+        padding: 12px 14px 12px 18px;
+        border-radius: 18px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .search-wrap input {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: var(--text);
+        font-size: 1rem;
+      }
+
+      .search-wrap input::placeholder {
+        color: #8da0be;
+      }
+
+      .search-btn {
+        border: none;
+        border-radius: 14px;
+        padding: 0.9rem 1.2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: white;
+        cursor: pointer;
+      }
+
+      .featured-box {
+        padding: 24px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .featured-badge {
+        position: absolute;
+        right: 18px;
+        top: 18px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--green);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .featured-image {
+        border-radius: 20px;
+        overflow: hidden;
+        height: 300px;
+        margin: 20px 0 16px;
+      }
+
+      .featured-image img {
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .featured-box h2 {
+        margin: 0 0 6px;
+        font-size: clamp(1.6rem, 2vw, 2.3rem);
+      }
+
+      .featured-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+
+      .featured-box p {
+        color: var(--soft-text);
+        line-height: 1.7;
+        margin: 0;
+      }
+
+      .filter-panel {
+        margin-top: 28px;
+        padding: 22px 20px;
+      }
+
+      .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(160px, 1fr));
+        gap: 16px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .field label {
+        color: var(--muted);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .field input,
+      .field select {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        background: rgba(15, 23, 42, 0.8);
+        color: var(--text);
+        border-radius: 14px;
+        min-height: 48px;
+        padding: 0 14px;
+        font: inherit;
+        outline: none;
+      }
+
+      .field input:focus,
+      .field select:focus {
+        border-color: rgba(255, 122, 89, 0.8);
+        box-shadow: 0 0 0 3px rgba(255, 122, 89, 0.18);
+      }
+
+      .reset-btn {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+        border-radius: 14px;
+        min-height: 48px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .stats {
+        margin-top: 26px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(150px, 1fr));
+        gap: 18px;
+        padding: 18px;
+      }
+
+      .stat-box {
+        padding: 18px 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .stat-box small {
+        color: var(--muted);
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.72rem;
+      }
+
+      .stat-box strong {
+        display: block;
+        margin-top: 6px;
+        font-size: clamp(1.7rem, 2vw, 2.5rem);
+      }
+
+      .result-header {
+        margin-top: 28px;
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .result-header h3 {
+        margin: 0;
+        font-size: 1.3rem;
+      }
+
+      .result-header span {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .meal-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(220px, 1fr));
+        gap: 22px;
+        margin-top: 22px;
+      }
+
+      .meal-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      .meal-card:hover,
+      .meal-card.active {
+        transform: translateY(-6px);
+        border-color: rgba(255, 122, 89, 0.5);
+        box-shadow: 0 22px 50px rgba(0, 0, 0, 0.2);
+      }
+
+      .meal-media {
+        position: relative;
+        height: 220px;
+        overflow: hidden;
+        background: #0a0f1d;
+      }
+
+      .meal-media img,
+      .meal-media iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        object-fit: cover;
+        transition: opacity 0.35s ease, transform 0.35s ease;
+      }
+
+      .meal-media img {
+        z-index: 1;
+      }
+
+      .meal-media iframe {
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(1.08);
+        z-index: 2;
+      }
+
+      .meal-card:hover .meal-media img,
+      .meal-card.active .meal-media img {
+        opacity: 0;
+        transform: scale(1.08);
+      }
+
+      .meal-card:hover .meal-media iframe,
+      .meal-card.active .meal-media iframe {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .meal-content {
+        padding: 16px 16px 18px;
+      }
+
+      .meal-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .meal-content h4 {
+        margin: 0 0 10px;
+        font-size: 1.18rem;
+      }
+
+      .meal-content p {
+        margin: 0 0 14px;
+        color: var(--soft-text);
+        line-height: 1.7;
+        font-size: 0.94rem;
+      }
+
+      .meal-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .meal-ingredients {
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.5;
+      }
+
+      .meal-link {
+        display: inline-flex;
+        padding: 0.7rem 0.9rem;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+
+      .empty-state {
+        margin-top: 24px;
+        padding: 48px 20px;
+        border: 1px dashed rgba(255, 255, 255, 0.18);
+        border-radius: 22px;
+        text-align: center;
+        color: var(--muted);
+        background: rgba(15, 23, 42, 0.45);
+      }
+
+      @media (max-width: 980px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-grid {
+          grid-template-columns: repeat(2, minmax(150px, 1fr));
+        }
+
+        .meal-grid {
+          grid-template-columns: repeat(2, minmax(200px, 1fr));
+        }
+      }
+
+      @media (max-width: 640px) {
+        .topbar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 14px;
+        }
+
+        .nav-links {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .search-wrap {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .filter-grid,
+        .stats,
+        .meal-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .result-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chef-cursor" aria-hidden="true"></div>
+    <div class="smoke-layer" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="page-shell" style="position: relative; z-index: 1;">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">F</div>
+          <span>Flavor Finder</span>
+        </div>
+
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="#discover">Discover</a>
+          <a href="#filters">Filters</a>
+          <a href="#recipes">Recipes</a>
+        </nav>
+
+        <div style="display:flex; align-items:center; gap:12px;">
+          <button id="soundToggle" class="sound-toggle" type="button" aria-label="Toggle cooking ambience">Sound: Off</button>
+          <button class="nav-btn" type="button">Explore Now</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" id="discover">
+          <div class="hero-content">
+            <p class="eyebrow">Fresh tastes daily</p>
+            <h1>Find your next favorite meal.</h1>
+            <p class="hero-copy">
+              Browse vibrant dishes from around the world, filter by category and cuisine,
+              and discover recipes that match your cravings.
+            </p>
+
+            <div class="search-wrap" role="search">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Search for a meal, ingredient, or dish..."
+                aria-label="Search meals"
+              />
+              <button id="searchBtn" class="search-btn" type="button">Search</button>
+            </div>
+          </div>
+
+          <aside class="featured-box">
+            <div class="featured-badge">Chef Pick</div>
+            <div id="featuredMeal" aria-live="polite"></div>
+          </aside>
+        </section>
+
+        <section class="filter-panel" id="filters">
+          <div class="filter-grid">
+            <div class="field">
+              <label for="categoryFilter">Category</label>
+              <select id="categoryFilter">
+                <option value="">All Categories</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="areaFilter">Cuisine</label>
+              <select id="areaFilter">
+                <option value="">All Cuisines</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="ingredientFilter">Ingredient</label>
+              <input
+                id="ingredientFilter"
+                type="text"
+                placeholder="e.g. chicken, rice"
+                aria-label="Ingredient filter"
+              />
+            </div>
+
+            <div class="field">
+              <label>&nbsp;</label>
+              <button id="resetFilters" class="reset-btn" type="button">Reset Filters</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats" aria-label="Meal overview">
+          <div class="stat-box">
+            <small>Total Meals</small>
+            <strong id="totalMeals">0</strong>
+          </div>
+          <div class="stat-box">
+            <small>Categories</small>
+            <strong id="categoryCount">0</strong>
+          </div>
+          <div class="stat-box">
+            <small>Cuisines</small>
+            <strong id="areaCount">0</strong>
+          </div>
+        </section>
+
+        <section id="recipes">
+          <div class="result-header">
+            <h3>Recipe Collection</h3>
+            <span id="resultText">Loading dishes...</span>
+          </div>
+
+          <div id="mealGrid" class="meal-grid" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const apiBase = "https://www.themealdb.com/api/json/v1/1";
+      const allMeals = [];
+      const categoryList = [];
+      const areaList = [];
+
+      const searchInput = document.getElementById("searchInput");
+      const searchBtn = document.getElementById("searchBtn");
+      const categoryFilter = document.getElementById("categoryFilter");
+      const areaFilter = document.getElementById("areaFilter");
+      const ingredientFilter = document.getElementById("ingredientFilter");
+      const resetFilters = document.getElementById("resetFilters");
+      const mealGrid = document.getElementById("mealGrid");
+      const resultText = document.getElementById("resultText");
+      const totalMeals = document.getElementById("totalMeals");
+      const categoryCount = document.getElementById("categoryCount");
+      const areaCount = document.getElementById("areaCount");
+      const featuredMeal = document.getElementById("featuredMeal");
+
+      function getIngredients(meal) {
+        const ingredients = [];
+        for (let i = 1; i <= 20; i++) {
+          const name = meal[`strIngredient${i}`];
+          if (name && name.trim()) {
+            ingredients.push(name.trim());
+          }
+        }
+        return ingredients;
+      }
+
+      function getShortDescription(meal) {
+        if (!meal.strInstructions) return "A delicious homemade favorite full of rich flavor.";
+        return meal.strInstructions.replace(/\s+/g, " ").trim().slice(0, 120) + "...";
+      }
+
+      function getYouTubeId(url) {
+        if (!url) return "";
+        const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([A-Za-z0-9_-]{11})/);
+        return match ? match[1] : "";
+      }
+
+      function renderFeaturedMeal(meals) {
+        const source = meals && meals.length ? meals[0] : allMeals[0];
+        if (!source) {
+          featuredMeal.innerHTML = "";
+          return;
+        }
+
+        featuredMeal.innerHTML = `
+          <div class="featured-image">
+            <img src="${source.strMealThumb}" alt="${source.strMeal}" />
+          </div>
+          <h2>${source.strMeal}</h2>
+          <div class="featured-meta">
+            <span class="tag">${source.strCategory}</span>
+            <span class="tag">${source.strArea}</span>
+          </div>
+          <p>${getShortDescription(source)}</p>
+        `;
+      }
+
+      function renderMeals(meals) {
+        mealGrid.innerHTML = "";
+
+        if (!meals.length) {
+          mealGrid.innerHTML = `
+            <div class="empty-state">
+              <h3>No meals match your filters.</h3>
+              <p>Try a different search or reset the filters to explore all dishes.</p>
+            </div>
+          `;
+          resultText.textContent = "0 matching recipes";
+          return;
+        }
+
+        meals.forEach((meal) => {
+          const ingredients = getIngredients(meal);
+          const ingredientText = ingredients.slice(0, 3).join(" • ") || "Fresh ingredients";
+          const href = meal.strYoutube || meal.strSource || "#";
+          const videoId = getYouTubeId(meal.strYoutube);
+
+          const card = document.createElement("article");
+          card.className = "meal-card";
+
+          const iframeMarkup = videoId ? `
+            <iframe
+              class="meal-iframe"
+              data-video-id="${videoId}"
+              title="${meal.strMeal} video"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          ` : "";
+
+          card.innerHTML = `
+            <div class="meal-media">
+              <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
+              ${iframeMarkup}
+            </div>
+            <div class="meal-content">
+              <div class="meal-tags">
+                <span class="tag">${meal.strCategory}</span>
+                <span class="tag">${meal.strArea}</span>
+              </div>
+              <h4>${meal.strMeal}</h4>
+              <p>${getShortDescription(meal)}</p>
+              <div class="meal-footer">
+                <div class="meal-ingredients">${ingredientText}</div>
+                <a class="meal-link" href="${href}" target="_blank" rel="noreferrer">View</a>
+              </div>
+            </div>
+          `;
+
+          const iframe = card.querySelector(".meal-iframe");
+          const playVideo = () => {
+            if (!iframe || !iframe.dataset.videoId) return;
+            const src = `https://www.youtube.com/embed/${iframe.dataset.videoId}?autoplay=1&mute=1&loop=1&playlist=${iframe.dataset.videoId}&controls=0&rel=0&modestbranding=1`;
+            if (iframe.src !== src) iframe.src = src;
+            card.classList.add("active");
+            startAmbientSound();
+          };
+
+          card.addEventListener("mouseenter", playVideo);
+          card.addEventListener("focusin", playVideo);
+          card.addEventListener("click", () => {
+            const isActive = card.classList.contains("active");
+            document.querySelectorAll(".meal-card").forEach((item) => item.classList.remove("active"));
+            if (!isActive) card.classList.add("active");
+            playVideo();
+          });
+
+          mealGrid.appendChild(card);
+        });
+
+        resultText.textContent = `${meals.length} recipes found`;
+      }
+
+      function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const category = categoryFilter.value;
+        const area = areaFilter.value;
+        const ingredient = ingredientFilter.value.trim().toLowerCase();
+
+        const filtered = allMeals.filter((meal) => {
+          const mealName = (meal.strMeal || "").toLowerCase();
+          const includedIngredients = getIngredients(meal).map((item) => item.toLowerCase());
+          const categoryMatch = !category || meal.strCategory === category;
+          const areaMatch = !area || meal.strArea === area;
+          const searchMatch = !query || mealName.includes(query);
+          const ingredientMatch = !ingredient || includedIngredients.some((item) => item.includes(ingredient));
+
+          return categoryMatch && areaMatch && searchMatch && ingredientMatch;
+        });
+
+        renderMeals(filtered);
+        renderFeaturedMeal(filtered);
+        totalMeals.textContent = filtered.length;
+      }
+
+      function populateDropdown(selectElement, options, placeholderLabel) {
+        selectElement.innerHTML = `<option value="">${placeholderLabel}</option>`;
+        options.forEach((option) => {
+          const optionEl = document.createElement("option");
+          optionEl.value = option;
+          optionEl.textContent = option;
+          selectElement.appendChild(optionEl);
+        });
+      }
+
+      async function loadFilterOptions() {
+        try {
+          const [categoryResponse, areaResponse] = await Promise.all([
+            fetch(`${apiBase}/categories.php`),
+            fetch(`${apiBase}/list.php?a=list`)
+          ]);
+
+          const categoryData = await categoryResponse.json();
+          const areaData = await areaResponse.json();
+
+          if (categoryData.categories) {
+            const categoryNames = categoryData.categories.map((category) => category.strCategory);
+            categoryList.push(...categoryNames);
+            populateDropdown(categoryFilter, categoryNames, "All Categories");
+          }
+
+          if (areaData.meals) {
+            const areaNames = areaData.meals.map((area) => area.strArea);
+            areaList.push(...areaNames);
+            populateDropdown(areaFilter, areaNames, "All Cuisines");
+          }
+
+          categoryCount.textContent = categoryList.length || "0";
+          areaCount.textContent = areaList.length || "0";
+        } catch (error) {
+          console.error("Failed to load filter options:", error);
+        }
+      }
+
+      async function loadMeals() {
+        try {
+          const response = await fetch(`${apiBase}/search.php?s=`);
+          const data = await response.json();
+
+          if (!data.meals) {
+            mealGrid.innerHTML = `
+              <div class="empty-state">
+                <h3>No dishes available right now.</h3>
+                <p>Please try again in a moment.</p>
+              </div>
+            `;
+            return;
+          }
+
+          allMeals.push(...data.meals);
+          renderMeals(allMeals);
+          renderFeaturedMeal(allMeals);
+          totalMeals.textContent = allMeals.length;
+          resultText.textContent = `${allMeals.length} recipes found`;
+        } catch (error) {
+          console.error("Could not fetch meals:", error);
+          mealGrid.innerHTML = `
+            <div class="empty-state">
+              <h3>Something went wrong.</h3>
+              <p>Check your internet connection and try again.</p>
+            </div>
+          `;
+        }
+      }
+
+      let ambientAudio = null;
+      let ambientStarted = false;
+
+      function startAmbientSound() {
+        if (ambientStarted) return;
+
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+
+        const audioCtx = new AudioCtx();
+        ambientAudio = audioCtx;
+        const masterGain = audioCtx.createGain();
+        masterGain.gain.value = 0.03;
+        masterGain.connect(audioCtx.destination);
+
+        const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+          data[i] = (Math.random() * 2 - 1) * 0.35;
+        }
+
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = noiseBuffer;
+        const noiseFilter = audioCtx.createBiquadFilter();
+        noiseFilter.type = "lowpass";
+        noiseFilter.frequency.value = 1400;
+        const noiseGain = audioCtx.createGain();
+        noiseGain.gain.value = 0.18;
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(masterGain);
+        noise.loop = true;
+        noise.start();
+
+        const oscillator = audioCtx.createOscillator();
+        oscillator.type = "triangle";
+        oscillator.frequency.value = 90;
+        const oscGain = audioCtx.createGain();
+        oscGain.gain.value = 0.05;
+        oscillator.connect(oscGain);
+        oscGain.connect(masterGain);
+        oscillator.start();
+
+        ambientStarted = true;
+        document.getElementById("soundToggle").textContent = "Sound: On";
+      }
+
+      function toggleAmbientSound() {
+        if (!ambientAudio) {
+          startAmbientSound();
+          return;
+        }
+
+        const isRunning = ambientAudio.state === "running";
+        if (isRunning) {
+          ambientAudio.suspend();
+          document.getElementById("soundToggle").textContent = "Sound: Off";
+        } else {
+          ambientAudio.resume();
+          document.getElementById("soundToggle").textContent = "Sound: On";
+        }
+      }
+
+      searchInput.addEventListener("input", applyFilters);
+      searchBtn.addEventListener("click", applyFilters);
+      categoryFilter.addEventListener("change", applyFilters);
+      areaFilter.addEventListener("change", applyFilters);
+      ingredientFilter.addEventListener("input", applyFilters);
+
+      resetFilters.addEventListener("click", () => {
+        searchInput.value = "";
+        categoryFilter.value = "";
+        areaFilter.value = "";
+        ingredientFilter.value = "";
+        applyFilters();
+      });
+
+      const chefCursor = document.querySelector(".chef-cursor");
+
+      document.addEventListener("pointermove", (event) => {
+        chefCursor.style.left = `${event.clientX}px`;
+        chefCursor.style.top = `${event.clientY}px`;
+      });
+
+      document.querySelectorAll("a, button, select, input, .meal-card").forEach((element) => {
+        element.addEventListener("mouseenter", () => chefCursor.classList.add("hover"));
+        element.addEventListener("mouseleave", () => chefCursor.classList.remove("hover"));
+      });
+
+      document.body.addEventListener("pointerdown", startAmbientSound, { once: true });
+      document.getElementById("soundToggle").addEventListener("click", toggleAmbientSound);
+
+      loadMeals();
+      loadFilterOptions();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+   h1{
+    color: #fff5e6;
+    background-color: rgb(88, 131, 155);
+    padding: 5px;
+      
+    text-align: center;
+    transition: transform .5s;
+        box-shadow: 0 0 20px rgb(155, 209, 236);
+}
+p{
+    color: rgb(155, 209, 236);
+    
+    padding: 5px;
+}
+body{
+    background-image: url("naruto.png");
+    background-size: cover;
+    background-attachment: fixed;
+}h1:hover{
+    transform:scale(1.2
+    );
+}

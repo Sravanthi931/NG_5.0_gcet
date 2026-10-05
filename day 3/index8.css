@@ -1,0 +1,9 @@
+.box{
+    background-color: green;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;}
+.conatiner{
+    display: grid;
+    grid-template-columns: 25% 50% 25% ;
+    grid-template-rows: auto;}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      .main-heading-style {
+            text-decoration: underline;
+            background-color: rgb(145, 75, 75);
+        }
+
+        .buttonStyle {
+            background-color: green;
+            padding: 50px;
+            margin-left: 100px;
+            border-radius: 0 500px;
+            border: 5px dashed orange;
+        }
+        .buttonStyle2{
+            background-color: grey;
+            padding: 30px;
+            margin-left: 100px;
+            border-top-right-radius: 800px;
+            border-top-left-radius: 800px;
+            border-bottom-left-radius: 800px;
+            border-bottom-right-radius: 800px;
+            border: 5px solid black;
+        }
+        .buttonStyle3{
+            background-color: brown;
+            padding: 50px;
+            margin-top: 50px;
+            margin-left: 50px;
+            border-radius: 80px 80px ;
+            border: 5px solid black;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 id="mainheading">dom operations</h1>
+    <h1 id="m2">hello world</h1>
+
+    <button id="buttonid">submit</button>
+    <button id="b2">Register</button>
+    <button id="b3">Clear</button>
+
+    <script>
+        let buttontag = document.getElementById("buttonid");
+        buttontag.classList.add("buttonStyle");
+
+        let mainhead1 = document.getElementById("mainheading");
+        mainhead1.classList.add("main-heading-style");
+
+        let btag2=document.getElementById("b2");
+        btag2.classList.add("buttonStyle2");
+
+         let btag3=document.getElementById("b3");
+        btag3.classList.add("buttonStyle3");
+       /* mainhead1.style.backgroundColor="orange";
+        let m12=document.getElementById("m2");
+        m12.style.backgroundColor="green";
+        mainhead1.style.color="white"
+        m12.style.color="white"
+       // mainhead1.style.fontFamily="arial";
+       mainhead1.style.textAlign = "center";
+        m12.style.textAlign = "center";
+/*mainhead1.style.borderRight = "5px  solid black";
+mainhead1.style.borderLeft = "5px solid black";
+mainhead1.classList.add("main-heading-style");
+*/
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+.box{
+    border: 10px solid rebeccapurple;
+    padding-left: 20px;
+    margin-top: 30px;
+    border-top: 2px dotted green;
+    border-right: 2px dotted green;
+    border-left: 2px dotted green;
+    border-bottom: 2px dotted rgb(0, 11, 128);
+}

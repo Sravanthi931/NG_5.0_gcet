@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h1>Random number game</h1>
+<h3 id="randomvalue"></h3>
+<h3 id="result"></h3>
+
+<input type="text" value="sravs" placeholder="enter" id="userinput">
+<button onclick="randomName()">check</button>
+
+
+<script>
+    // console.log("hello")
+    // var a = 10;
+    // var a = 709;
+    // let a = 10;
+    // a = 709;
+    // const;
+
+    /* if (true) {
+        let a = 10;
+        console.log(a);
+    } */
+
+    let randomNumber = Math.random();
+    let multiplyTwenty = parseInt(randomNumber * 20);
+
+    console.log(randomNumber);
+    console.log(multiplyTwenty);      
+
+    let randomValueElement = document.getElementById("randomvalue");
+    console.log(randomValueElement);
+
+    randomValueElement.textContent = "random number: " + multiplyTwenty;
+    let input=document.getElementById("userinput");
+   
+    let randomValueElementResult = document.getElementById("result");
+    console.log(input.value);
+    function randomName(){
+         let convertInput=parseInt(input.value);
+        if(convertInput==multiplyTwenty){
+         randomValueElementResult.textContent="you won"
+        }else{
+            randomValueElementResult.textContent="u lost"+multiplyTwenty;
+        }
+    }
+
+
+    </script>
+</body>
+</html>

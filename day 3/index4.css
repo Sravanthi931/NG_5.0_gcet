@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+/* hfsadyi */
+font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}h1{
+    color:rgb(89, 121, 111)
+}
+.student{
+    color: rgba(242, 242, 254, 0.464);
+    font-size: 30px;
+}
+#special{
+   color: antiquewhite;
+}
+/* group selector */
+h1,#special,h2,.student{
+    text-align: center;
+}
+body{
+    background-image: url(dark.png);
+    background-size: cover;
+}
